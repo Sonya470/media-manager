@@ -300,11 +300,11 @@
                     </a>
 
                     <div class="btn-group">
-                        @if($currentPage !== 1)
+                        @if($currentPage > 1)
                             <a href="{{ route('media-index', ['path' => $url['path'], 'page' => $url['page']-1]) }}"
                                class="btn btn-default active"><i class="fa fa-chevron-left"></i></a>
                         @endif
-                        @if($currentPage !== $countPage)
+                        @if($currentPage < $countPage)
                             <a href="{{ route('media-index', ['path' => $url['path'], 'page' => $url['page']+1]) }}"
                                class="btn btn-default"><i class="fa fa-chevron-right"></i></a>
                         @endif
