@@ -181,6 +181,7 @@ class MediaManager extends Extension
             'delete'     => route('media-delete'),
             'upload'     => route('media-upload'),
             'new-folder' => route('media-new-folder'),
+            'page'       => $this->page
         ];
     }
 
