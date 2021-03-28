@@ -20,6 +20,7 @@ class MediaManager extends Extension
      * @var string
      */
     protected $path = '/';
+    protected $page = 1;
 
     /**
      * @var \Illuminate\Filesystem\FilesystemAdapter
@@ -45,10 +46,12 @@ class MediaManager extends Extension
      * MediaManager constructor.
      *
      * @param string $path
+     * @param int $page
      */
-    public function __construct($path = '/')
+    public function __construct($path = '/',$page = 1)
     {
         $this->path = $path;
+        $this->page = $page;
 
         $this->initStorage();
     }
@@ -64,7 +67,7 @@ class MediaManager extends Extension
         }
     }
 
-    public function ls($page)
+    public function ls()
     {
         if (!$this->exists()) {
             Handler::error('Error', "File or directory [$this->path] not exists");
@@ -76,11 +79,20 @@ class MediaManager extends Extension
 
         $directories = $this->storage->directories($this->path);
 
-        return $this->formatDirectories($directories)
+        $count = $this->formatDirectories($directories)
             ->merge($this->formatFiles($files))
             ->sort(function ($item) {
                 return $item['name'];
-            })->forPage($page,20);
+            })->count();
+
+        return [
+            'files' => $this->formatDirectories($directories)
+            ->merge($this->formatFiles($files))
+            ->sort(function ($item) {
+                return $item['name'];
+            })->forPage($this->page,20),
+            'count-pages' => $count/20,
+            'current-page'=> $this->page];
     }
 
     /**
@@ -316,4 +328,6 @@ class MediaManager extends Extension
 
         return date('Y-m-d H:i:s', $time);
     }
+
+
 }

@@ -16,11 +16,14 @@ class MediaController extends Controller
 
             $path = $request->get('path', '/');
             $view = $request->get('view', 'table');
+            $page = $request->get('page',1);
 
-            $manager = new MediaManager($path);
-
+            $manager = new MediaManager($path,$page);
+            $array = $manager->ls();
             $content->body(view("laravel-admin-media::$view", [
-                'list'   => $manager->ls($request->get('page',1)),
+                'list'   => $array['files'],
+                'countPage' => $array['count-pages'],
+                'currentPage'=> $array['current-page'],
                 'nav'    => $manager->navigation(),
                 'url'    => $manager->urls(),
             ]));
